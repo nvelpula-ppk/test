@@ -30,8 +30,8 @@ jobs:
 
       - name: Run Collection and Generate HTML Report
         run: |
-          newman run "Login.postman_collection.json" -e "Testing.postman_environment.json" -r cli,htmlextra --reporter-htmlextra-export testArtifacts/htmlreport.html 
-          newman run "SuperAdmin.postman_collection.json" -e "Testing.postman_environment.json" -r cli,htmlextra --reporter-htmlextra-export testArtifacts/htmlreport.html 
+          newman run "Login.postman_collection.json" -e "Testing.postman_environment.json"
+          newman run "SuperAdmin.postman_collection.json" -e "Testing.postman_environment.json"
       - name: Upload HTML Report
         uses: actions/upload-artifact@v3
         with:
