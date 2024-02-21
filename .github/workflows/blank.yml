@@ -1,0 +1,39 @@
+name: Run postman collections automatically with newman
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Create directory
+        run: mkdir TestArtifact
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'v20.11.0' # Adjust the version as needed
+
+      - name: Install Newman and HTML reporter
+        run: |
+          npm install -g newman
+          npm install -g newman-reporter-htmlextra
+
+      - name: Run Collection and Generate HTML Report
+        run: |
+          newman run "Login.postman_collection.json" -e "Testing.postman_environment.json" -r cli,htmlextra --reporter-htmlextra-export testArtifacts/htmlreport.html 
+          
+      - name: Upload HTML Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: Reports
+          path: testArtifacts
