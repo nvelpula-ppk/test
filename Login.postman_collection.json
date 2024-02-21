@@ -1,0 +1,977 @@
+{
+	"info": {
+		"_postman_id": "8bca4529-fe80-458c-9718-6a96279d39c2",
+		"name": "Login",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32086188",
+		"_collection_link": "https://grey-station-233986.postman.co/workspace/React-Admin-V1~2d44aa0d-2cb3-4c3d-856c-26c37b0ba74e/collection/32086188-8bca4529-fe80-458c-9718-6a96279d39c2?action=share&source=collection_link&creator=32086188"
+	},
+	"item": [
+		{
+			"name": "Happy path Login",
+			"item": [
+				{
+					"name": "Login to superadmin with valid data",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const getemail =pm.request.body.toJSON()\r",
+									"\r",
+									"// Extract values from the request body\r",
+									"const email = JSON.parse(getemail.raw);\r",
+									"\r",
+									"//const password = requestBody.password;\r",
+									"//const rememberMe = requestBody.rememberMe;\r",
+									"console.log(email.email)\r",
+									"// Set values as collection variables\r",
+									"pm.collectionVariables.set(\"SuperAdminEmail\", email.email);\r",
+									"//pm.collectionVariables.set(\"password\", password);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let superemail=pm.collectionVariables.get(\"SuperAdminEmail\");\r",
+									"console.log(superemail)\r",
+									"\r",
+									"if (pm.response.json().data && pm.response.json().data.token) {\r",
+									"\r",
+									"    //pm.globals.set(\"variable_key\", \"variable_value\");\r",
+									"    // const token=pm.response.json().data.token;\r",
+									"      pm.environment.set(\"SuperAdminToken\", pm.response.json().data.token);\r",
+									"    pm.test(\"Successful login: Response body has the expected structure\", function () {\r",
+									"        pm.expect(pm.response.json()).to.have.all.keys(\"data\", \"success\");\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Successful login: Token is present and not empty\", function () {\r",
+									"        pm.expect(pm.response.json().data.token).to.not.be.empty;\r",
+									"    });\r",
+									"\r",
+									"  \r",
+									"    pm.test(\"Successful login: Response indicates success\", function () {\r",
+									"        pm.expect(pm.response.json().success).to.be.true;\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Successful login: User details are correct\", function () {\r",
+									"        const user = pm.response.json().data.user;\r",
+									"        pm.expect(user).to.have.property(\"firstname\").that.is.a(\"string\");\r",
+									"        pm.expect(user).to.have.property(\"lastname\").that.is.a(\"string\");\r",
+									"        pm.expect(user.email).to.eql(superemail)\r",
+									"        pm.expect(user).to.have.property(\"middlename\");\r",
+									"        pm.expect(user).to.have.property(\"role\").that.is.a(\"string\");\r",
+									"        pm.expect(user).to.have.property(\"isActive\");\r",
+									"        pm.expect(user).to.have.property(\"loginSSO\");\r",
+									"        pm.expect(user).to.have.property(\"_id\").that.is.a(\"string\");\r",
+									"        //pm.expect(user).to.have.property(\"companyid\").that.is.a(\"string\");\r",
+									"      //  pm.expect(user).to.have.property(\"departid\");\r",
+									"        pm.expect(user).to.have.property(\"additionalRoles\").that.is.an(\"array\")\r",
+									"        pm.expect(user).to.have.property(\"lastLoggedInDate\");\r",
+									"        pm.expect(user).to.have.property(\"uuid\").that.is.a(\"string\");\r",
+									"    });\r",
+									"} \r",
+									"// pm.environment.set(\"variable_key\", \"variable_value\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"superadmin@gmail.com\",\r\n    \"password\":\"Admin123\",\r\n    \"rememberMe\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base URL}}/auth/sign-in",
+							"host": [
+								"{{Base URL}}"
+							],
+							"path": [
+								"auth",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login to company admin with valid data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let companyemail=pm.collectionVariables.get(\"CompanyAdminEmail\");\r",
+									"console.log(companyemail)\r",
+									"\r",
+									"if (pm.response.json().data && pm.response.json().data.token) {\r",
+									"\r",
+									"    pm.environment.set(\"CompanyAdminToken\", pm.response.json().data.token);\r",
+									"    pm.test(\"Successful login: Response body has the expected structure\", function () {\r",
+									"        pm.expect(pm.response.json()).to.have.all.keys(\"data\", \"success\");\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Successful login: Token is present and not empty\", function () {\r",
+									"        pm.expect(pm.response.json().data.token).to.not.be.empty;\r",
+									"    });\r",
+									"\r",
+									"  \r",
+									"    pm.test(\"Successful login: Response indicates success\", function () {\r",
+									"        pm.expect(pm.response.json().success).to.be.true;\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Successful login: User details are correct\", function () {\r",
+									"        const user = pm.response.json().data.user;\r",
+									"        pm.expect(user).to.have.property(\"firstname\").that.is.a(\"string\");\r",
+									"        pm.expect(user).to.have.property(\"lastname\").that.is.a(\"string\");\r",
+									"        pm.expect(user.email).to.eql(companyemail)\r",
+									"        pm.expect(user).to.have.property(\"middlename\");\r",
+									"        pm.expect(user).to.have.property(\"role\").that.is.a(\"string\");\r",
+									"        pm.expect(user).to.have.property(\"isActive\");\r",
+									"        pm.expect(user).to.have.property(\"loginSSO\");\r",
+									"        pm.expect(user).to.have.property(\"_id\").that.is.a(\"string\");\r",
+									"        pm.expect(user).to.have.property(\"companyid\").that.is.a(\"string\");\r",
+									"      //  pm.expect(user).to.have.property(\"departid\");\r",
+									"        pm.expect(user).to.have.property(\"additionalRoles\").that.is.an(\"array\")\r",
+									"        pm.expect(user).to.have.property(\"lastLoggedInDate\");\r",
+									"        pm.expect(user).to.have.property(\"uuid\").that.is.a(\"string\");\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const getemail =pm.request.body.toJSON()\r",
+									"\r",
+									"// Extract values from the request body\r",
+									"const email = JSON.parse(getemail.raw);\r",
+									"\r",
+									"//const password = requestBody.password;\r",
+									"//const rememberMe = requestBody.rememberMe;\r",
+									"console.log(email.email)\r",
+									"// Set values as collection variables\r",
+									"pm.collectionVariables.set(\"CompanyAdminEmail\", email.email);\r",
+									"//pm.collectionVariables.set(\"password\", password);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"apitestadmin1111@gmail.com\",\r\n    \"password\": \"Apitestadmin@1111\",\r\n    \"rememberMe\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base URL}}/auth/sign-in",
+							"host": [
+								"{{Base URL}}"
+							],
+							"path": [
+								"auth",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login to site admin with valid data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let sitemail=pm.collectionVariables.get(\"SiteAdminEmail\");\r",
+									"console.log(sitemail)\r",
+									"\r",
+									"if (pm.response.json().data && pm.response.json().data.token) {\r",
+									" pm.environment.set(\"SiteAdminToken\", pm.response.json().data.token);\r",
+									"    pm.test(\"Successful login: Response body has the expected structure\", function () {\r",
+									"        pm.expect(pm.response.json()).to.have.all.keys(\"data\", \"success\");\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Successful login: Token is present and not empty\", function () {\r",
+									"        pm.expect(pm.response.json().data.token).to.not.be.empty;\r",
+									"    });\r",
+									"\r",
+									"  \r",
+									"    pm.test(\"Successful login: Response indicates success\", function () {\r",
+									"        pm.expect(pm.response.json().success).to.be.true;\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Successful login: User details are correct\", function () {\r",
+									"        const user = pm.response.json().data.user;\r",
+									"        pm.expect(user).to.have.property(\"firstname\").that.is.a(\"string\");\r",
+									"        pm.expect(user).to.have.property(\"lastname\").that.is.a(\"string\");\r",
+									"        pm.expect(user.email).to.eql(sitemail)\r",
+									"        pm.expect(user).to.have.property(\"middlename\");\r",
+									"        pm.expect(user).to.have.property(\"role\").that.is.a(\"string\");\r",
+									"        pm.expect(user).to.have.property(\"isActive\");\r",
+									"        pm.expect(user).to.have.property(\"loginSSO\");\r",
+									"        pm.expect(user).to.have.property(\"_id\").that.is.a(\"string\");\r",
+									"        pm.expect(user).to.have.property(\"companyid\").that.is.a(\"string\");\r",
+									"      //  pm.expect(user).to.have.property(\"departid\");\r",
+									"        pm.expect(user).to.have.property(\"additionalRoles\").that.is.an(\"array\")\r",
+									"        pm.expect(user).to.have.property(\"lastLoggedInDate\");\r",
+									"        pm.expect(user).to.have.property(\"uuid\").that.is.a(\"string\");\r",
+									"    });\r",
+									"} \r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const getemail =pm.request.body.toJSON()\r",
+									"\r",
+									"// Extract values from the request body\r",
+									"const email = JSON.parse(getemail.raw);\r",
+									"\r",
+									"//const password = requestBody.password;\r",
+									"//const rememberMe = requestBody.rememberMe;\r",
+									"console.log(email.email)\r",
+									"// Set values as collection variables\r",
+									"pm.collectionVariables.set(\"SiteAdminEmail\", email.email);\r",
+									"//pm.collectionVariables.set(\"password\", password);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"demositeadmintest11@gmail.com\",\r\n    \"password\":\"Demositeadmintest11@123\",\r\n    \"rememberMe\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base URL}}/auth/sign-in",
+							"host": [
+								"{{Base URL}}"
+							],
+							"path": [
+								"auth",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login to department admin with valid data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let deptemail=pm.collectionVariables.get(\"DeptAdminEmail\");\r",
+									"console.log(deptemail)\r",
+									"if (pm.response.json().data && pm.response.json().data.token) {\r",
+									" pm.environment.set(\"DepartmentAdminToken\", pm.response.json().data.token);\r",
+									"    pm.test(\"Successful login: Response body has the expected structure\", function () {\r",
+									"        pm.expect(pm.response.json()).to.have.all.keys(\"data\", \"success\");\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Successful login: Token is present and not empty\", function () {\r",
+									"        pm.expect(pm.response.json().data.token).to.not.be.empty;\r",
+									"    });\r",
+									"\r",
+									"  \r",
+									"    pm.test(\"Successful login: Response indicates success\", function () {\r",
+									"        pm.expect(pm.response.json().success).to.be.true;\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Successful login: User details are correct\", function () {\r",
+									"        const user = pm.response.json().data.user;\r",
+									"        pm.expect(user).to.have.property(\"firstname\").that.is.a(\"string\");\r",
+									"        pm.expect(user).to.have.property(\"lastname\").that.is.a(\"string\");\r",
+									"        pm.expect(user.email).to.eql(deptemail)\r",
+									"        pm.expect(user).to.have.property(\"middlename\");\r",
+									"        pm.expect(user).to.have.property(\"role\").that.is.a(\"string\");\r",
+									"        pm.expect(user).to.have.property(\"isActive\");\r",
+									"        pm.expect(user).to.have.property(\"loginSSO\");\r",
+									"        pm.expect(user).to.have.property(\"_id\").that.is.a(\"string\");\r",
+									"        pm.expect(user).to.have.property(\"companyid\").that.is.a(\"string\");\r",
+									"      //  pm.expect(user).to.have.property(\"departid\");\r",
+									"        pm.expect(user).to.have.property(\"additionalRoles\").that.is.an(\"array\")\r",
+									"        pm.expect(user).to.have.property(\"lastLoggedInDate\");\r",
+									"        pm.expect(user).to.have.property(\"uuid\").that.is.a(\"string\");\r",
+									"    });\r",
+									"} \r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const getemail =pm.request.body.toJSON()\r",
+									"\r",
+									"// Extract values from the request body\r",
+									"const email = JSON.parse(getemail.raw);\r",
+									"\r",
+									"//const password = requestBody.password;\r",
+									"//const rememberMe = requestBody.rememberMe;\r",
+									"console.log(email.email)\r",
+									"// Set values as collection variables\r",
+									"pm.collectionVariables.set(\"DeptAdminEmail\", email.email);\r",
+									"//pm.collectionVariables.set(\"password\", password);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"demoapideptadmin1@gmail.com\",\r\n    \"password\":\"Demoapideptadmin1@123\",\r\n    \"rememberMe\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base URL}}/auth/sign-in",
+							"host": [
+								"{{Base URL}}"
+							],
+							"path": [
+								"auth",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Negative Path-Login",
+			"item": [
+				{
+					"name": "Login to superadmin with valid data",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const getemail =pm.request.body.toJSON()\r",
+									"\r",
+									"// Extract values from the request body\r",
+									"const email = JSON.parse(getemail.raw);\r",
+									"\r",
+									"//const password = requestBody.password;\r",
+									"//const rememberMe = requestBody.rememberMe;\r",
+									"console.log(email.email)\r",
+									"// Set values as collection variables\r",
+									"pm.collectionVariables.set(\"SuperAdminEmail\", email.email);\r",
+									"//pm.collectionVariables.set(\"password\", password);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// let superemail=pm.collectionVariables.get(\"SuperAdminEmail\");\r",
+									"// console.log(superemail)\r",
+									"\r",
+									"    pm.test(\"User already logged in: Response body has the expected structure\", function () {\r",
+									"        pm.expect(pm.response.json()).to.have.all.keys(\"success\");\r",
+									"    });\r",
+									"\r",
+									"    \r",
+									"    pm.test(\"User already logged in: Response indicates success\", function () {\r",
+									"        pm.expect(pm.response.json().success).to.be.true;\r",
+									"    });\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"superadmin@gmail.com\",\r\n    \"password\":\"Admin123\",\r\n    \"rememberMe\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base URL}}/auth/sign-in",
+							"host": [
+								"{{Base URL}}"
+							],
+							"path": [
+								"auth",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login to company admin with valid data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// let companyemail=pm.collectionVariables.get(\"CompanyAdminEmail\");\r",
+									"// console.log(companyemail)\r",
+									" pm.test(\"User already logged in: Response body has the expected structure\", function () {\r",
+									"        pm.expect(pm.response.json()).to.have.all.keys(\"success\");\r",
+									"    });\r",
+									"\r",
+									"    \r",
+									"    pm.test(\"User already logged in: Response indicates success\", function () {\r",
+									"        pm.expect(pm.response.json().success).to.be.true;\r",
+									"    });\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const getemail =pm.request.body.toJSON()\r",
+									"\r",
+									"// Extract values from the request body\r",
+									"const email = JSON.parse(getemail.raw);\r",
+									"\r",
+									"//const password = requestBody.password;\r",
+									"//const rememberMe = requestBody.rememberMe;\r",
+									"console.log(email.email)\r",
+									"// Set values as collection variables\r",
+									"pm.collectionVariables.set(\"CompanyAdminEmail\", email.email);\r",
+									"//pm.collectionVariables.set(\"password\", password);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"testcompany1@gmail.com\",\r\n    \"password\":\"Testcompany1@123\",\r\n    \"rememberMe\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base URL}}/auth/sign-in",
+							"host": [
+								"{{Base URL}}"
+							],
+							"path": [
+								"auth",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login to site admin with valid data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// let sitemail=pm.collectionVariables.get(\"SiteAdminEmail\");\r",
+									"// console.log(sitemail)\r",
+									" pm.test(\"User already logged in: Response body has the expected structure\", function () {\r",
+									"        pm.expect(pm.response.json()).to.have.all.keys(\"success\");\r",
+									"    });\r",
+									"\r",
+									"    \r",
+									"    pm.test(\"User already logged in: Response indicates success\", function () {\r",
+									"        pm.expect(pm.response.json().success).to.be.true;\r",
+									"    });\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const getemail =pm.request.body.toJSON()\r",
+									"\r",
+									"// Extract values from the request body\r",
+									"const email = JSON.parse(getemail.raw);\r",
+									"\r",
+									"//const password = requestBody.password;\r",
+									"//const rememberMe = requestBody.rememberMe;\r",
+									"console.log(email.email)\r",
+									"// Set values as collection variables\r",
+									"pm.collectionVariables.set(\"SiteAdminEmail\", email.email);\r",
+									"//pm.collectionVariables.set(\"password\", password);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"bbb@gmail.com\",\r\n    \"password\":\"Bbb@1234\",\r\n    \"rememberMe\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base URL}}/auth/sign-in",
+							"host": [
+								"{{Base URL}}"
+							],
+							"path": [
+								"auth",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login to department admin with valid data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// let deptemail=pm.collectionVariables.get(\"DeptAdminEmail\");\r",
+									"// console.log(deptemail)\r",
+									" pm.test(\"User already logged in: Response body has the expected structure\", function () {\r",
+									"        pm.expect(pm.response.json()).to.have.all.keys(\"success\");\r",
+									"    });\r",
+									"\r",
+									"    \r",
+									"    pm.test(\"User already logged in: Response indicates success\", function () {\r",
+									"        pm.expect(pm.response.json().success).to.be.true;\r",
+									"    });\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const getemail =pm.request.body.toJSON()\r",
+									"\r",
+									"// Extract values from the request body\r",
+									"const email = JSON.parse(getemail.raw);\r",
+									"\r",
+									"//const password = requestBody.password;\r",
+									"//const rememberMe = requestBody.rememberMe;\r",
+									"console.log(email.email)\r",
+									"// Set values as collection variables\r",
+									"pm.collectionVariables.set(\"DeptAdminEmail\", email.email);\r",
+									"//pm.collectionVariables.set(\"password\", password);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"deptadmin1@gmail.com\",\r\n    \"password\":\"Deptadmin@123\",\r\n    \"rememberMe\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base URL}}/auth/sign-in",
+							"host": [
+								"{{Base URL}}"
+							],
+							"path": [
+								"auth",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 550\", function () {",
+							"    pm.response.to.have.status(550);",
+							"});"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Login with invalid data",
+			"item": [
+				{
+					"name": "Login with invalid email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"// Check if the response indicates a successful login\r",
+									"if (pm.response.json().data && pm.response.json().data.token) {\r",
+									"    // Test cases for successful login...\r",
+									"} \r",
+									"// Check if the response indicates a failed login due to user not found\r",
+									"else if (pm.response.json().data && pm.response.json().data.errors && pm.response.json().data.errors.includes(\"No such user exists\")) {\r",
+									"    // Verify the response body structure for failed login due to user not found\r",
+									"    pm.test(\"Failed login - No such user exists: Response body has the expected structure\", function () {\r",
+									"        pm.expect(pm.response.json()).to.have.all.keys(\"data\");\r",
+									"        pm.expect(pm.response.json().data).to.have.all.keys(\"success\", \"errors\");\r",
+									"    });\r",
+									"\r",
+									"    // Verify that the success property is false for failed login due to user not found\r",
+									"    pm.test(\"Failed login - No such user exists: Response indicates failure\", function () {\r",
+									"        pm.expect(pm.response.json().data.success).to.be.false;\r",
+									"    });\r",
+									"\r",
+									"    // Verify that the error message indicates \"No such user exists\"\r",
+									"    pm.test(\"Failed login - No such user exists: Error message is correct\", function () {\r",
+									"        pm.expect(pm.response.json().data.errors).to.include(\"No such user exists\");\r",
+									"    });\r",
+									"} \r",
+									"// If none of the above conditions are met, handle unexpected response\r",
+									"else {\r",
+									"    pm.test(\"Unexpected response format\", function () {\r",
+									"        pm.expect.fail(\"Unexpected response format\");\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"super@gmail.com\",\r\n    \"password\":\"Admin123\",\r\n    \"rememberMe\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base URL}}/auth/sign-in",
+							"host": [
+								"{{Base URL}}"
+							],
+							"path": [
+								"auth",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login with invalid credentials",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"// Check if the response indicates a successful login\r",
+									"if (pm.response.json().data && pm.response.json().data.token) {\r",
+									"    // Test cases for successful login...\r",
+									"} \r",
+									"// Check if the response indicates a failed login due to user not found\r",
+									"else if (pm.response.json().data && pm.response.json().data.errors && pm.response.json().data.errors.includes(\"No such user exists\")) {\r",
+									"    // Verify the response body structure for failed login due to user not found\r",
+									"    pm.test(\"Failed login - No such user exists: Response body has the expected structure\", function () {\r",
+									"        pm.expect(pm.response.json()).to.have.all.keys(\"data\");\r",
+									"        pm.expect(pm.response.json().data).to.have.all.keys(\"success\", \"errors\");\r",
+									"    });\r",
+									"\r",
+									"    // Verify that the success property is false for failed login due to user not found\r",
+									"    pm.test(\"Failed login - No such user exists: Response indicates failure\", function () {\r",
+									"        pm.expect(pm.response.json().data.success).to.be.false;\r",
+									"    });\r",
+									"\r",
+									"    // Verify that the error message indicates \"No such user exists\"\r",
+									"    pm.test(\"Failed login - No such user exists: Error message is correct\", function () {\r",
+									"        pm.expect(pm.response.json().data.errors).to.include(\"No such user exists\");\r",
+									"    });\r",
+									"} \r",
+									"// If none of the above conditions are met, handle unexpected response\r",
+									"else {\r",
+									"    pm.test(\"Unexpected response format\", function () {\r",
+									"        pm.expect.fail(\"Unexpected response format\");\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"depta1@gmail.com\",\r\n    \"password\":\"Depta@123\",\r\n    \"rememberMe\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base URL}}/auth/sign-in",
+							"host": [
+								"{{Base URL}}"
+							],
+							"path": [
+								"auth",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login with invalid password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 422\", function () {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"// Check if the response indicates a successful login\r",
+									"if (pm.response.json().data && pm.response.json().data.token) {\r",
+									"    // Test cases for successful login...\r",
+									"} \r",
+									"// Check if the response indicates a failed login due to user not found\r",
+									"else if (pm.response.json().data && pm.response.json().data.errors && pm.response.json().data.errors.includes(\"No such user exists\")) {\r",
+									"    // Verify the response body structure for failed login due to user not found\r",
+									"    pm.test(\"Failed login - No such user exists: Response body has the expected structure\", function () {\r",
+									"        pm.expect(pm.response.json()).to.have.all.keys(\"data\");\r",
+									"        pm.expect(pm.response.json().data).to.have.all.keys(\"success\", \"errors\");\r",
+									"    });\r",
+									"\r",
+									"    // Verify that the success property is false for failed login due to user not found\r",
+									"    pm.test(\"Failed login - No such user exists: Response indicates failure\", function () {\r",
+									"        pm.expect(pm.response.json().data.success).to.be.false;\r",
+									"    });\r",
+									"\r",
+									"    // Verify that the error message indicates \"No such user exists\"\r",
+									"    pm.test(\"Failed login - No such user exists: Error message is correct\", function () {\r",
+									"        pm.expect(pm.response.json().data.errors).to.include(\"No such user exists\");\r",
+									"    });\r",
+									"} \r",
+									"// Check if the response indicates a failed login due to incorrect password\r",
+									"else if (pm.response.json().data && pm.response.json().data.errors && pm.response.json().data.errors.includes(\"Password incorrect\")) {\r",
+									"    // Verify the response body structure for failed login due to incorrect password\r",
+									"    pm.test(\"Failed login - Incorrect password: Response body has the expected structure\", function () {\r",
+									"        pm.expect(pm.response.json()).to.have.all.keys(\"data\");\r",
+									"        pm.expect(pm.response.json().data).to.have.all.keys(\"success\", \"errors\");\r",
+									"    });\r",
+									"\r",
+									"    // Verify that the success property is false for failed login due to incorrect password\r",
+									"    pm.test(\"Failed login - Incorrect password: Response indicates failure\", function () {\r",
+									"        pm.expect(pm.response.json().data.success).to.be.false;\r",
+									"    });\r",
+									"\r",
+									"    // Verify that the error message indicates \"Password incorrect\"\r",
+									"    pm.test(\"Failed login - Incorrect password: Error message is correct\", function () {\r",
+									"        pm.expect(pm.response.json().data.errors).to.include(\"Password incorrect\");\r",
+									"    });\r",
+									"} \r",
+									"// If none of the above conditions are met, handle unexpected response\r",
+									"else {\r",
+									"    pm.test(\"Unexpected response format\", function () {\r",
+									"        pm.expect.fail(\"Unexpected response format\");\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"testcompany1@gmail.com\",\r\n    \"password\":\"Test@123\",\r\n    \"rememberMe\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base URL}}/auth/sign-in",
+							"host": [
+								"{{Base URL}}"
+							],
+							"path": [
+								"auth",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "SiteAdminEmail",
+			"value": ""
+		},
+		{
+			"key": "SuperAdminEmail",
+			"value": ""
+		},
+		{
+			"key": "CompanyAdminEmail",
+			"value": ""
+		},
+		{
+			"key": "DeptAdminEmail",
+			"value": ""
+		}
+	]
+}
