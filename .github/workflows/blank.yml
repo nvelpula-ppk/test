@@ -31,7 +31,7 @@ jobs:
      
       - name: Run Superadmin Collection
         run: |
-          newman run "SuperAdmin.postman_collection.json" -e "Testing.postman_environment.json"
+          newman run newman run https://api.postman.com/collections/32086188-8bca4529-fe80-458c-9718-6a96279d39c2?apikey=PMAK-65cb5a29b611230001fa0041-873d8bed8f53d959c4218b24236001a297 -e https://api.postman.com/environments/32086188-e8445ba5-6894-43ff-a524-8610443414b2?apikey=PMAK-65cb5a29b611230001fa0041-873d8bed8f53d959c4218b24236001a297 -r cli,htmlextra
       - name: Run Login Collection 
         run: |
           newman run "Login.postman_collection.json" -e "Testing.postman_environment.json"
