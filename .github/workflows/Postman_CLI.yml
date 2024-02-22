@@ -1,0 +1,32 @@
+
+name: Automated API tests using Postman CLI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  automated-api-tests:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install Postman CLI
+        run: |
+          powershell.exe -NoProfile -InputFormat None -ExecutionPolicy AllSigned -Command "[System.Net.ServicePointManager]::SecurityProtocol = 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://dl-cli.pstmn.io/install/win64.ps1'))"
+      
+      - name: Login to Postman CLI
+        run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
+      
+      - name: Run API tests
+        run: |
+          postman collection run "32086188-8bca4529-fe80-458c-9718-6a96279d39c2" -e "32086188-e8445ba5-6894-43ff-a524-8610443414b2"
+          postman collection run "32086188-9d67b193-4a55-440a-a20d-c451ac9a10e6" -e "32086188-e8445ba5-6894-43ff-a524-8610443414b2"
+          postman collection run "32086188-36a82d2f-5d18-4a9c-a3ec-b36223784965" -e "32086188-e8445ba5-6894-43ff-a524-8610443414b2"
+          postman collection run "32086188-c97b587b-f87b-4faf-9ab4-b317137c4d6d" -e "32086188-e8445ba5-6894-43ff-a524-8610443414b2"
+          postman collection run "32086188-93ab487f-cc75-4404-a5ac-59017b648a9c" -e "32086188-e8445ba5-6894-43ff-a524-8610443414b2"
+          postman collection run "32086188-68552266-0ebf-4843-90a8-8dc5a4008c18" -e "32086188-e8445ba5-6894-43ff-a524-8610443414b2"
+
+      
