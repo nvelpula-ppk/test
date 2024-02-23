@@ -1,0 +1,35 @@
+name: Run Newman Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install Node.js and npm
+      uses: actions/setup-node@v3
+      with:
+        node-version: 'v20.11.0'
+
+    - name: Install Newman
+      run: npm install -g newman newman-reporter-htmlextra
+
+    - name: Create directory for reports
+      run: mkdir -p newman_reports
+
+    - name: Run Newman tests
+      run: |
+        newman run https://api.postman.com/collections/32086188-e80d4555-cd2d-4244-bbad-eba0bbcb4959?apikey=PMAK-65cb5a29b611230001fa0041-873d8bed8f53d959c4218b24236001a297 \
+          -e https://api.postman.com/environments/32086188-9d4279cc-51bc-4c42-9e93-75e75848e679?apikey=PMAK-65cb5a29b611230001fa0041-873d8bed8f53d959c4218b24236001a297 \
+          --folder "LOGIN" \
+          --folder "SuperAdmin" \ --folder "CleanUp"
+          --reporters cli,htmlextra --reporter-htmlextra-export newman_reports/report.html
