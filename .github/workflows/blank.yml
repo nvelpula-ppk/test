@@ -40,7 +40,7 @@ jobs:
       run: |
         newman run https://api.postman.com/collections/32086188-e80d4555-cd2d-4244-bbad-eba0bbcb4959?apikey=PMAK-65cb5a29b611230001fa0041-873d8bed8f53d959c4218b24236001a297 \
           -e https://api.postman.com/environments/32086188-9d4279cc-51bc-4c42-9e93-75e75848e679?apikey=PMAK-65cb5a29b611230001fa0041-873d8bed8f53d959c4218b24236001a297 \
-          --folder "LOGIN" --reporters cli,htmlextra --reporter-htmlextra-export SampleArtifact/report.html
+          --folder "LOGIN" -r htmlextra --reporter-htmlextra-export SampleArtifact/report.html
     - name: Publish report
       uses: actions/upload-artifact@v3
       with:
